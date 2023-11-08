@@ -64,7 +64,7 @@ if ("serviceWorker" in navigator) {
 }
 */
 
-/*
+
 var target = document.getElementById('target');
 var watchId;
 
@@ -84,7 +84,8 @@ if ('geolocation' in navigator) {
   });
 } else {
   target.innerText = 'Geolocation API not supported.';
-*/
+
+  /*
 
 const locationButton = document.getElementById("locationButton");
 const fileInput = document.getElementById("fileInput");
