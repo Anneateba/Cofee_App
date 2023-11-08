@@ -63,6 +63,8 @@ if ("serviceWorker" in navigator) {
   });
 }
 */
+
+/*
 var target = document.getElementById('target');
 var watchId;
 
@@ -82,3 +84,21 @@ if ('geolocation' in navigator) {
   });
 } else {
   target.innerText = 'Geolocation API not supported.';
+*/
+
+const locationButton = document.getElementById("locationButton");
+const fileInput = document.getElementById("fileInput");
+const selectedFile = document.getElementById("selectedFile");
+
+locationButton.addEventListener("click", function() {
+    fileInput.click();
+});
+
+fileInput.addEventListener("change", function() {
+    const file = fileInput.files[0];
+    if (file) {
+        selectedFile.innerHTML = `Selected File: ${file.name}`;
+    } else {
+        selectedFile.innerHTML = "No file selected";
+    }
+});
