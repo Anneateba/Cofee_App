@@ -64,9 +64,11 @@ if ("serviceWorker" in navigator) {
 }
 */
 
+//In these variables the information about the location will be stored 
 
 var target = document.getElementById('target');
 var watchId;
+
 
 function appendLocation(location, verb) {
   verb = verb || 'updated';
