@@ -103,3 +103,4 @@ fileInput.addEventListener("change", function() {
         selectedFile.innerHTML = "No file selected";
     }
 });
+*/
