@@ -148,9 +148,6 @@ if ('geolocation' in navigator) {
 } else {
   target.innerText = 'Geolocation API not supported.';
 }
-
-
-//////////////////////
 if ('LinearAccelerationSensor' in window && 'Gyroscope' in window) {
   document.getElementById('moApi').innerHTML = 'Generic Sensor API';
   
@@ -214,6 +211,4 @@ function rotationHandler(rotation) {
 
 function intervalHandler(interval) {
   document.getElementById("moInterval").innerHTML = interval;
-
-
-
+}
