@@ -30,7 +30,7 @@ self.addEventListener("fetch", fetchEvent => {
     })
   );
 });
-*/
+
 
 var target = document.getElementById('target');
 var watchId;
@@ -70,3 +70,33 @@ fileInput.addEventListener("change", function() {
     }
 });
 */
+
+
+<!-- Filename: index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geolocation Demo</title>
+</head>
+<body>
+  <button id="askButton">Get Location</button>
+  <p id="target"></p>
+
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(registration => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(error => {
+          console.error('Service Worker registration failed:', error);
+        });
+    }
+  </script>
+</body>
+</html>
+
