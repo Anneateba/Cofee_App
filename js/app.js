@@ -1,4 +1,4 @@
-/*const container = document.querySelector(".container");
+const container = document.querySelector(".container");
 const coffees = [
   {
     name: "Perspiciatis",
@@ -62,8 +62,6 @@ if ("serviceWorker" in navigator) {
       .catch(err => console.log("service worker not registered", err));
   });
 }
-*/
-
 //In these variables the information about the location will be stored 
 
 var target = document.getElementById('target');
