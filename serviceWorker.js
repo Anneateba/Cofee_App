@@ -15,7 +15,7 @@ const assets = [
   "/images/coffee9.jpg"
 ];
 
-/*self.addEventListener("install", installEvent => {
+self.addEventListener("install", installEvent => {
   installEvent.waitUntil(
     caches.open(staticDevCoffee).then(cache => {
       cache.addAll(assets);
@@ -51,52 +51,4 @@ if ('geolocation' in navigator) {
   });
 } else {
   target.innerText = 'Geolocation API not supported.';
-
-/*
-const locationButton = document.getElementById("locationButton");
-const fileInput = document.getElementById("fileInput");
-const selectedFile = document.getElementById("selectedFile");
-
-locationButton.addEventListener("click", function() {
-    fileInput.click();
-});
-
-fileInput.addEventListener("change", function() {
-    const file = fileInput.files[0];
-    if (file) {
-        selectedFile.innerHTML = `Selected File: ${file.name}`;
-    } else {
-        selectedFile.innerHTML = "No file selected";
-    }
-});
-*/
-
-
-<!-- Filename: index.html -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geolocation Demo</title>
-</head>
-<body>
-  <button id="askButton">Get Location</button>
-  <p id="target"></p>
-
-  <script src="script.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(registration => {
-          console.log('Service Worker registered with scope:', registration.scope);
-        })
-        .catch(error => {
-          console.error('Service Worker registration failed:', error);
-        });
-    }
-  </script>
-</body>
-</html>
 
