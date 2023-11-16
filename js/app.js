@@ -257,12 +257,10 @@ if ('localStorage' in window || 'sessionStorage' in window) {
     if (engine === selectedEngine) {
       reloadInputValue();
     }
-  }
+  
 
   window.addEventListener('storage', onStorageChanged);
 }
-
-
 
 
 
