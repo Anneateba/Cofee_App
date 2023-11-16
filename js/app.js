@@ -337,117 +337,138 @@ function getUserMedia(options, successCallback, failureCallback) {
   throw new Error('User Media API not supported.');
 }
 
+var target = document.getElementById('target');
+var watchId;
 
-// This function is called to start the media stream and recording
-function getStream() {
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    alert('User Media API not supported.');
-    return;
-  }
-
-  var constraints = { video: true, audio: true };
-  getUserMedia(constraints, function (stream) {
-    var mediaControl = document.querySelector('video');
-    
-    // Older browsers may not have srcObject
-    if ("srcObject" in mediaControl) {
-      mediaControl.srcObject = stream;
-    } else {
-      // Avoid using this in new browsers, as it is going away.
-      mediaControl.src = window.URL.createObjectURL(stream);
-    }
-    
-    theStream = stream;
-    setupRecorder(stream); // This is a new function to encapsulate the recorder setup
-  }, function (err) {
-    alert('Error: ' + err);
-  });
-}
-function setupRecorder(stream) {
-  try {
-    theRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-    theRecorder.ondataavailable = function(event) {
-      if (event.data.size > 0) {
-        recordedChunks.push(event.data);
-      }
-    };
-    theRecorder.start(100); // Collect 100ms of data chunks
-  } catch (e) {
-    console.error('Exception while creating MediaRecorder:', e);
-    return;
-  }
-  console.log('MediaRecorder created');
+function appendLocation(location, verb) {
+  verb = verb || 'updated';
+  var newLocation = document.createElement('p');
+  newLocation.innerHTML = 'Location ' + verb + ': ' + location.coords.latitude + ', ' + location.coords.longitude + '';
+  target.appendChild(newLocation);
 }
 
-// This new function retrieves the video from the cache and downloads it.
-async function downloadFromCache() {
-  const videoKey = 'my_recorded_video.webm';  // This should match the key used when saving the video.
+// storage quotas
+if ('storage' in navigator && 'estimate' in navigator.storage) {
+  navigator.storage.estimate()
+    .then(estimate => {
+      document.getElementById('usage').innerHTML = estimate.usage;
+      document.getElementById('quota').innerHTML = estimate.quota;
+      document.getElementById('percent').innerHTML = (estimate.usage * 100 / estimate.quota).toFixed(0);
+    });
+}
 
-  if (!('caches' in window)) {
-    alert('Cache API not supported!');
-    return;
-  }
+if ('storage' in navigator && 'persisted' in navigator.storage) {
+  navigator.storage.persisted()
+    .then(persisted => {
+      document.getElementById('persisted').innerHTML = persisted ? 'persisted' : 'not persisted';
+    });
+}
 
-  try {
-    const cache = await caches.open('video-cache');
-    const cachedResponse = await cache.match(videoKey);
-    
-    if (!cachedResponse || !cachedResponse.ok) {
-      throw new Error('No cached video found!');
-    }
-
-    const blob = await cachedResponse.blob();
-    const url = window.URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'downloaded_video.webm';
-    document.body.appendChild(a);
-    a.click();
-    
-    // Cleanup
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-  } catch (err) {
-    console.error('Failed to download video from cache:', err);
-    alert(`Error: ${err.message}`);
+function requestPersistence() {
+  if ('storage' in navigator && 'persist' in navigator.storage) {
+    navigator.storage.persist()
+      .then(persisted => {
+        document.getElementById('persisted').innerHTML = persisted ? 'persisted' : 'not persisted';
+      });
   }
 }
 
+//file access
 
+function getReadFile(reader, i) {
+  return function () {
+    var li = document.querySelector('[data-idx="' + i + '"]');
 
-// Stops the recording and saves the video to cache
-function stopRecordingAndSaveToCache() {
-  console.log('Stopping recording and saving data');
-  theRecorder.stop();
-  theStream.getTracks().forEach(track => track.stop());
+    li.innerHTML += 'File starts with "' + reader.result.substr(0, 25) + '"';
+  }
+}
 
-  theRecorder.onstop = function() {
-    // Create a Blob from the recorded chunks
-    var blob = new Blob(recordedChunks, { type: 'video/webm' });
-    saveToCache(blob);
+function readFiles(files) {
+  document.getElementById('count').innerHTML = files.length;
+
+  var target = document.getElementById('target');
+  target.innerHTML = '';
+
+  for (var i = 0; i < files.length; ++i) {
+    var item = document.createElement('li');
+    item.setAttribute('data-idx', i);
+    var file = files[i];
+
+    var reader = new FileReader();
+    reader.addEventListener('load', getReadFile(reader, i));
+    reader.readAsText(file);
+
+    item.innerHTML = '' + file.name + ', ' + file.type + ', ' + file.size + ' bytes, last modified ' + file.lastModifiedDate + '';
+    target.appendChild(item);
   };
 }
 
-// Saves the recording Blob to the cache
-function saveToCache(blob) {
-  if ('caches' in window) {
-    const videoKey = 'my_recorded_video.webm';
-    const request = new Request(videoKey, { mode: 'no-cors' });
-    const response = new Response(blob);
-
-    caches.open('video-cache').then(cache => {
-      cache.put(request, response).then(() => {
-        console.log('Saved video to cache.');
-      }).catch(error => {
-        console.error('Failed to save video to cache:', error);
-      });
-    });
-  } else {
-    console.error('Cache API not supported');
+async function writeFile() {
+  if (!window.chooseFileSystemEntries) {
+    alert('Native File System API not supported');
+    return;
   }
+  
+  const target = document.getElementById('target');
+  target.innerHTML = 'Opening file handle...';
+  
+  const handle = await window.chooseFileSystemEntries({
+    type: 'save-file',
+  });
+  
+  const file = await handle.getFile()
+  const writer = await handle.createWriter();
+  await writer.write(0, 'Hello world from What Web Can Do!');
+  await writer.close()
+  
+  target.innerHTML = 'Test content written to ' + file.name + '.';
 }
 
+// offline storage
 
-// ... Rest of your code such as service worker registration and notifications ...
+if ('localStorage' in window || 'sessionStorage' in window) {
+  var selectedEngine;
+
+  var logTarget = document.getElementById('target');
+  var valueInput = document.getElementById('value');
+
+  var reloadInputValue = function () {
+  console.log(selectedEngine, window[selectedEngine].getItem('myKey'))
+    valueInput.value = window[selectedEngine].getItem('myKey') || '';
+  }
   
+  var selectEngine = function (engine) {
+    selectedEngine = engine;
+    reloadInputValue();
+  };
+
+  function handleChange(change) {
+    var timeBadge = new Date().toTimeString().split(' ')[0];
+    var newState = document.createElement('p');
+    newState.innerHTML = '' + timeBadge + ' ' + change + '.';
+    logTarget.appendChild(newState);
+  }
+
+  var radios = document.querySelectorAll('#selectEngine input');
+  for (var i = 0; i < radios.length; ++i) {
+    radios[i].addEventListener('change', function () {
+      selectEngine(this.value)
+    });
+  }
+  
+  selectEngine('localStorage');
+
+  valueInput.addEventListener('keyup', function () {
+    window[selectedEngine].setItem('myKey', this.value);
+  });
+
+  var onStorageChanged = function (change) {
+    var engine = change.storageArea === window.localStorage ? 'localStorage' : 'sessionStorage';
+    handleChange('External change in ' + engine + ': key ' + change.key + ' changed from ' + change.oldValue + ' to ' + change.newValue + '');
+    if (engine === selectedEngine) {
+      reloadInputValue();
+    }
+  }
+
+  window.addEventListener('storage', onStorageChanged);
+}
