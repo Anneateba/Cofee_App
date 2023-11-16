@@ -261,8 +261,9 @@ if ('localStorage' in window || 'sessionStorage' in window) {
 
   window.addEventListener('storage', onStorageChanged);
 }
-
-
+function intervalHandler(interval) {
+  document.getElementById("moInterval").innerHTML = interval;
+}
 function getReadFile(reader, i) {
   return function () {
     var li = document.querySelector('[data-idx="' + i + '"]');
@@ -310,33 +311,7 @@ async function writeFile() {
   await writer.close()
   
   target.innerHTML = 'Test content written to ' + file.name + '.';
-
-
-if ('storage' in navigator && 'estimate' in navigator.storage) {
-  navigator.storage.estimate()
-    .then(estimate => {
-      document.getElementById('usage').innerHTML = estimate.usage;
-      document.getElementById('quota').innerHTML = estimate.quota;
-      document.getElementById('percent').innerHTML = (estimate.usage * 100 / estimate.quota).toFixed(0);
-    });
 }
-
-if ('storage' in navigator && 'persisted' in navigator.storage) {
-  navigator.storage.persisted()
-    .then(persisted => {
-      document.getElementById('persisted').innerHTML = persisted ? 'persisted' : 'not persisted';
-    });
-}
-
-function requestPersistence() {
-  if ('storage' in navigator && 'persist' in navigator.storage) {
-    navigator.storage.persist()
-      .then(persisted => {
-        document.getElementById('persisted').innerHTML = persisted ? 'persisted' : 'not persisted';
-      });
-  }
-}
-
 
   
   
