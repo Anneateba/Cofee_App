@@ -322,11 +322,6 @@ async function writeFile() {
 
 
 
-// Define global variables to keep track of the stream and recorder
-var theStream;
-var theRecorder;
-var recordedChunks = [];
-
 // This function initializes user media
 function getUserMedia(options, successCallback, failureCallback) {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
