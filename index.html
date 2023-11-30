@@ -255,7 +255,7 @@
 
 -->
 
-<!--<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Expense Tracker</title>
@@ -274,7 +274,7 @@
     </tr>
   </table>
 <script>
-    let budget = 0;
+   /* let budget = 0;
     let balance = 0;
     const transaktionForm = document.getElementById('transaktionForm');
     const transaktionsListe = document.getElementById('transaktionsListe');
@@ -365,16 +365,9 @@
             // Gesamtbetrag berechnen und aktualisieren
             const gesamtbetrag = transaktionen.reduce((sum, transaktion) => sum + transaktion.transaktion, 0);
             gesamtbetragElement.textContent = Gesamtbetrag: ${gesamtbetrag};
-        }
-  </script>
-<!--<script src="js/app.js"></script>
-</body>
-</html>
+            */
 
--->
-
-
-const transaktionForm = document.getElementById('transaktionForm');
+    const transaktionForm = document.getElementById('transaktionForm');
         const transaktionsListe = document.getElementById('transaktionsListe');
         const textInput = document.getElementById('text');
         const transaktionInput = document.getElementById('transaktion');
@@ -389,7 +382,7 @@ const transaktionForm = document.getElementById('transaktionForm');
                 updateTransaktionsListe();
                 updateGesamtbetrag();
             }
-        }
+        } 
 
         // Array zur Speicherung der Transaktionen
         const transaktionen = [];
@@ -443,5 +436,11 @@ const transaktionForm = document.getElementById('transaktionForm');
             const gesamtbetrag = transaktionen.reduce((sum, transaktion) => sum + transaktion.transaktion, 0);
             gesamtbetragElement.textContent = Gesamtbetrag: ${gesamtbetrag};
         }
+
+  </script>
+
+</body>
+</html>
+
 
 
