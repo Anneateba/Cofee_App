@@ -173,3 +173,37 @@ saveToCache('entry1', entry);
 // Beispiel: Eintrag aus dem Cache abrufen
 const cachedEntry = getFromCache('entry1');
 console.log(cachedEntry);
+
+// Daten im Cache speichern
+function saveToCache(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+// Daten aus dem Cache abrufen
+function getFromCache(key) {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+}
+
+// Funktion zum Hinzufügen einer Ausgabe
+function addExpense() {
+  // Code zum Hinzufügen einer Ausgabe
+
+  // Eintrag erstellen
+  const entry = { description: 'Example', date: '01-01-2023', category: 'Example', amount: 100, balance: 500 };
+
+  // Eintrag im Cache speichern
+  saveToCache('entry' + new Date().getTime(), entry);
+}
+
+// Beim Laden der Seite Einträge aus dem Cache laden
+window.onload = function() {
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('entry')) {
+      const entry = getFromCache(key);
+      // Code zum Anzeigen der Einträge in der Tabelle
+    }
+  }
+}
+
