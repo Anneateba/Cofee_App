@@ -155,6 +155,13 @@ if ('localStorage' in window || 'sessionStorage' in window) {
 
 */
 
+
+
+
+
+
+
+/*
 // Daten im Cache speichern
 function saveToCache(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
@@ -173,6 +180,8 @@ saveToCache('entry1', entry);
 // Beispiel: Eintrag aus dem Cache abrufen
 const cachedEntry = getFromCache('entry1');
 console.log(cachedEntry);
+*/
+
 
 // Daten im Cache speichern
 function saveToCache(key, data) {
