@@ -253,7 +253,7 @@
 </body>
 </html>
 
--->
+
 
 <!DOCTYPE html>
 <html>
@@ -365,82 +365,83 @@
             // Gesamtbetrag berechnen und aktualisieren
             const gesamtbetrag = transaktionen.reduce((sum, transaktion) => sum + transaktion.transaktion, 0);
             gesamtbetragElement.textContent = Gesamtbetrag: ${gesamtbetrag};
-            */
+            */ -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Expense Tracker</title>
+</head>
+<body>
+  <h2>Expense Tracker</h2>
+  <p>Budget: <input type="number" id="budgetInput"></p>
+  <button onclick="addExpense()">Add Expense</button>
+  <table id="expenseTable">
+    <tr>
+      <th>Description</th>
+      <th>Date</th>
+      <th>Category</th>
+      <th>Amount</th>
+      <th>Balance</th>
+    </tr>
+  </table>
 
-    const transaktionForm = document.getElementById('transaktionForm');
-        const transaktionsListe = document.getElementById('transaktionsListe');
-        const textInput = document.getElementById('text');
-        const transaktionInput = document.getElementById('transaktion');
-        const gesamtbetragElement = document.getElementById('gesamtbetrag');
+  <script>
+    let budget = 0;
+    let balance = 0;
 
-        // Funktion zur Datenwiederherstellung aus localStorage
-        function restoreData() {
-            const savedData = localStorage.getItem('transaktionen');
-            if (savedData) {
-                const parsedData = JSON.parse(savedData);
-                transaktionen.push(...parsedData);
-                updateTransaktionsListe();
-                updateGesamtbetrag();
-            }
-        } 
-
-        // Array zur Speicherung der Transaktionen
-        const transaktionen = [];
-
-        // Daten bei Laden der Seite wiederherstellen
-        restoreData();
-
-        transaktionForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            // Werte aus den Eingabefeldern abrufen
-            const text = textInput.value;
-            const transaktion = parseFloat(transaktionInput.value);
-
-            // Transaktion zum Array hinzufügen
-            transaktionen.push({ text, transaktion });
-
-            // Transaktionsliste aktualisieren
-            updateTransaktionsListe();
-
-            // Gesamtbetrag aktualisieren
-            updateGesamtbetrag();
-
-            // Daten in localStorage speichern
-            localStorage.setItem('transaktionen', JSON.stringify(transaktionen));
-
-            // Eingabefelder leeren
-            textInput.value = '';
-            transaktionInput.value = '';
+    // Funktion zum Laden der Einträge aus dem Cache
+    window.onload = function() {
+      if (localStorage.getItem('expenses')) {
+        const expenses = JSON.parse(localStorage.getItem('expenses'));
+        expenses.forEach(function(entry) {
+          addRow(entry.description, entry.date, entry.category, entry.amount, entry.balance);
         });
+      }
+    }
 
-        function updateTransaktionsListe() {
-            // Transaktionsliste leeren
-            transaktionsListe.innerHTML = '';
+    // Funktion zum Hinzufügen einer Ausgabe
+    function addExpense() {
+      const description = prompt("Enter description:");
+      const date = prompt("Enter date (YYYY-MM-DD):");
+      const category = prompt("Enter category:");
+      const amount = prompt("Enter amount:");
+      balance = budget - amount;
+      budget = balance;
+      addRow(description, date, category, amount, balance);
+      saveToCache('expenses', Array.from(document.getElementById('expenseTable').rows).slice(1).map(row => ({
+        description: row.cells[0].innerHTML,
+        date: row.cells[1].innerHTML,
+        category: row.cells[2].innerHTML,
+        amount: row.cells[3].innerHTML,
+        balance: row.cells[4].innerHTML
+      })));
+    }
 
-            // Transaktionen durchlaufen und zur Liste hinzufügen
-            transaktionen.forEach(function (transaktion) {
-                const row = document.createElement('tr');
-                const beschreibungCell = document.createElement('td');
-                beschreibungCell.textContent = transaktion.text;
-                const kostenCell = document.createElement('td');
-                kostenCell.textContent = transaktion.transaktion;
-                row.appendChild(beschreibungCell);
-                row.appendChild(kostenCell);
-                transaktionsListe.appendChild(row);
-            });
-        }
+    // Funktion zum Hinzufügen einer Zeile zur Tabelle
+    function addRow(description, date, category, amount, balance) {
+      const table = document.getElementById("expenseTable");
+      const row = table.insertRow(-1);
+      const cell1 = row.insertCell(0);
+      const cell2 = row.insertCell(1);
+      const cell3 = row.insertCell(2);
+      const cell4 = row.insertCell(3);
+      const cell5 = row.insertCell(4);
+      cell1.innerHTML = description;
+      cell2.innerHTML = date;
+      cell3.innerHTML = category;
+      cell4.innerHTML = amount;
+      cell5.innerHTML = balance;
+    }
 
-        function updateGesamtbetrag() {
-            // Gesamtbetrag berechnen und aktualisieren
-            const gesamtbetrag = transaktionen.reduce((sum, transaktion) => sum + transaktion.transaktion, 0);
-            gesamtbetragElement.textContent = Gesamtbetrag: ${gesamtbetrag};
-        }
-
+    // Funktion zum Speichern der Einträge im Cache
+    function saveToCache(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
   </script>
-
 </body>
 </html>
+    
 
+  
 
 
