@@ -276,6 +276,11 @@
 <script>
     let budget = 0;
     let balance = 0;
+    const transaktionForm = document.getElementById('transaktionForm');
+    const transaktionsListe = document.getElementById('transaktionsListe');
+    const textInput = document.getElementById('text');
+    const transaktionInput = document.getElementById('transaktion');
+    const gesamtbetragElement = document.getElementById('gesamtbetrag');
 
     function addExpense() {
       const description = prompt("Enter description:");
@@ -287,7 +292,7 @@
       const table = document.getElementById("expenseTable");
       const row = table.insertRow(-1);
       const cell1 = row.insertCell(0);
-         const cell2 = row.insertCell(1);
+      const cell2 = row.insertCell(1);
       const cell3 = row.insertCell(2);
       const cell4 = row.insertCell(3);
       const cell5 = row.insertCell(4);
@@ -296,13 +301,7 @@
       cell3.innerHTML = category;
       cell4.innerHTML = amount;
       cell5.innerHTML = balance;
-
         
-const transaktionForm = document.getElementById('transaktionForm');
-        const transaktionsListe = document.getElementById('transaktionsListe');
-        const textInput = document.getElementById('text');
-        const transaktionInput = document.getElementById('transaktion');
-        const gesamtbetragElement = document.getElementById('gesamtbetrag');
 
         // Funktion zur Datenwiederherstellung aus localStorage
         function restoreData() {
