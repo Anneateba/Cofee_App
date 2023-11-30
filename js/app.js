@@ -1,5 +1,5 @@
 // Define global variables to keep track of the stream and recorder
-var theStream;
+/*var theStream;
 var theRecorder;
 var recordedChunks = [];
 
@@ -152,3 +152,24 @@ if ('localStorage' in window || 'sessionStorage' in window) {
 
   window.addEventListener('storage', onStorageChanged);
 }
+
+*/
+
+// Daten im Cache speichern
+function saveToCache(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+// Daten aus dem Cache abrufen
+function getFromCache(key) {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+}
+
+// Beispiel: Eintrag im Cache speichern
+const entry = { description: 'Example', date: '01-01-2023', category: 'Example', amount: 100, balance: 500 };
+saveToCache('entry1', entry);
+
+// Beispiel: Eintrag aus dem Cache abrufen
+const cachedEntry = getFromCache('entry1');
+console.log(cachedEntry);
