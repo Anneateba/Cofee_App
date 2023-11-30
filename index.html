@@ -297,9 +297,37 @@
       cell4.innerHTML = amount;
       cell5.innerHTML = balance;
 
+        
+// Daten bei Laden der Seite wiederherstellen
+        restoreData();
+
+        transaktionForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Werte aus den Eingabefeldern abrufen
+            const text = textInput.value;
+            const transaktion = parseFloat(transaktionInput.value);
+
+            // Transaktion zum Array hinzufügen
+            transaktionen.push({ text, transaktion });
+
+            // Transaktionsliste aktualisieren
+            updateTransaktionsListe();
+
+   // Gesamtbetrag aktualisieren
+            updateGesamtbetrag();
+
+            // Daten in localStorage speichern
+            localStorage.setItem('transaktionen', JSON.stringify(transaktionen));
+
+            // Eingabefelder leeren
+            textInput.value = '';
+            transaktionInput.value = '';
+        });
+
     }
   </script>
-<script src="js/app.js"></script>
+<!--<script src="js/app.js"></script>-->
 </body>
 </html>
 
